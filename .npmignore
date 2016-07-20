@@ -1,0 +1,11 @@
+/node_modules
+/.idea
+*.iml
+/m-coverage
+/typings
+*.tgz
+/npm
+/spec
+/src
+testRunner.js
+typings.json

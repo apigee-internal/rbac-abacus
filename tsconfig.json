@@ -1,0 +1,23 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "module": "amd",
+    "target": "es5",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "outDir": "./build"
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "m-coverage",
+    "npm",
+    "spec",
+    "src/resourcePermissions.spec.ts",
+    "src/rolePermissions.spec.ts"
+  ]
+}

@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@revision.aeip.apigee.net:alm/rbac-abacus.git"
+    "url": "git@github.com:apigee-internal/rbac-abacus.git"
   },
   "keywords": [
     "RBAC",

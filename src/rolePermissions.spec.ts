@@ -210,6 +210,25 @@ describe('RolePermissions', () => {
         expect(rp.allows('/a/b/c', ['get'])).toBe(true);
     });
 
+    it('Implicit permissions are not carried over after merge', () => {
+        const p0 = emptyPerm('abc');
+        p0.path = '/';
+        p0.permissions = ['get'];
+        const p1 = emptyPerm('abc');
+        p1.path = '/a';
+        p1.permissions = [];
+        const p2 = emptyPerm('abc');
+        p2.path = '/a/b/c';
+        p2.permissions = [];
+        const rp1 = new RolePermissions({ resourcePermission: [p0, p1] });
+        const rp2 = new RolePermissions({ resourcePermission: [p0, p2] });
+        const rp = rp1.merge(rp2);
+        expect(rp.allows('/a', ['get'])).toBe(false);
+        expect(rp2.allows('/a/b', ['get'])).toBe(true);
+        expect(rp.allows('/a/b', ['get'])).toBe(false); // This may arguably should not be the case but it is the way RBAC Apigee implementation works
+        expect(rp.allows('/a/b/c', ['get'])).toBe(false);
+    });
+
     it('More specific permission will win forbidding', () => {
         const p1 = emptyPerm('abc');
         p1.path = '/a';
@@ -230,5 +249,22 @@ describe('RolePermissions', () => {
         const rp = new RolePermissions({ resourcePermission: [p1] });
         expect(rp.allowsOperations('/a').length).toBe(1);
         expect(rp.allowsOperations('/a').indexOf('get')).toBeGreaterThan(-1);
+    });
+
+    it('Merge with same path', () => {
+        const p1 = emptyPerm('abc');
+        p1.path = '/a';
+        p1.permissions = ['get', 'put', 'delete'];
+        const rp1 = new RolePermissions({ resourcePermission: [p1] });
+
+        const p2 = emptyPerm('abc');
+        p2.path = '/a';
+        p2.permissions = ['get'];
+        const rp2 = new RolePermissions({ resourcePermission: [p2] });
+
+        const rp = rp1.merge(rp2);
+        expect(rp.allows('/a', ['get'])).toBe(true);
+        expect(rp.allows('/a', ['put'])).toBe(true);
+        expect(rp.allows('/a', ['delete'])).toBe(true);
     });
 });
